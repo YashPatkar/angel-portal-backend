@@ -10,9 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
-import pymysql
-pymysql.install_as_MySQLdb()
-
 from pathlib import Path
 from datetime import timedelta
 import os
