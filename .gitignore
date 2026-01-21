@@ -1,0 +1,51 @@
+# --------------------
+# Python
+# --------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# --------------------
+# Virtual environments
+# --------------------
+.venv/
+venv/
+env/
+
+# --------------------
+# Environment variables
+# --------------------
+.env
+.env.*
+
+# --------------------
+# Django
+# --------------------
+db.sqlite3
+staticfiles/
+media/
+
+# --------------------
+# uv (Python package manager)
+# --------------------
+.uv/
+.python-version
+
+# --------------------
+# Editors / OS
+# --------------------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --------------------
+# Logs
+# --------------------
+*.log
+
+# --------------------
+# Docker
+# --------------------
+mysql_data/
