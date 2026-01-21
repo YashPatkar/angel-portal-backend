@@ -1,95 +1,99 @@
 # Task & Project Management – Backend (Django)
 
+## Live URLs
+- Backend API: https://angel-portal-backend.onrender.com/
+- Frontend App: https://angel-portal-frontend.vercel.app/
+
+---
+
 ## Test Credentials
 
 ### Admin
-Email: admin@gmail.com  
-Password: 123 
+- Email: admin@gmail.com
+- Password: 123
 
-### User
-Email: user@gmail.com  
-Password: user123  
+### Users
+- Email: user@gmail.com  
+  Password: user123
 
----
-
-## Live URLs
-
-- Backend API: <BACKEND_LIVE_URL>
-- Frontend App: <FRONTEND_LIVE_URL>
+- Email: abc@gmail.com  
+  Password: abc
 
 ---
 
-## API Routes
+## API Overview
+Authentication: JWT (Authorization: Bearer <token>)
 
 ### Authentication
-- POST /api/auth/login/  
+- `POST /api/auth/login/`  
   Login and receive JWT token
 
-- POST /api/auth/register/  
-  Register New User
+- `POST /api/auth/register/`  
+  Register a new user
 
 ---
 
 ### Projects (Admin Only)
-- GET /api/projects/  
+- `GET /api/projects/`  
   List all projects
 
-- POST /api/projects/  
-  Create a new project
+- `POST /api/projects/`  
+  Create a project
 
 ---
 
 ### Tasks
-- GET /api/tasks/  
+- `GET /api/tasks/`  
   Admin: all tasks  
   User: only assigned tasks
 
-- POST /api/tasks/  
-  Admin only – create and assign task
+- `POST /api/tasks/`  
+  Admin only – create and assign tasks
 
-- PATCH /api/tasks/{id}/  
+- `PATCH /api/tasks/{id}/`  
   Update task status  
-  Only admin can close overdue tasks
+  Only Admin can close overdue tasks
 
 ---
 
-### Projects with Tasks (Read API)
-- GET /api/projects-with-tasks/  
+### Projects with Tasks
+- `GET /api/projects-with-tasks/`  
   Returns projects with related tasks  
   Admin sees all tasks  
   Users see only assigned tasks
 
 ---
 
-### Overdue Task Handling (Django Feature)
-- POST /api/run-overdue-check/  
+### Overdue Task Logic (Django Feature)
+- `POST /api/run-overdue-check/`  
   Admin only  
-  Marks past-due tasks as OVERDUE  
-  Returns count of updated tasks
+  - Marks past-due tasks as `OVERDUE`
+  - Overdue tasks cannot move back to `IN_PROGRESS`
+  - Only Admin can close overdue tasks
 
 ---
 
-## Setup
+## Setup (Local)
 
-### Environment Variables (.env)
-
+### Environment Variables
 ```env
 SECRET_KEY=your-secret-key
 DEBUG=True
 
-DB_NAME=task_manager
-DB_USER=taskuser
-DB_PASSWORD=taskpass
-DB_HOST=localhost
-DB_PORT=3306
+MYSQL_DB_NAME=
+MYSQL_USER=
+MYSQL_PASSWORD=
+MYSQL_HOST=
+MYSQL_PORT=3306
 
 ALLOWED_HOSTS=localhost,127.0.0.1
 CORS_ALLOWED_ORIGINS=http://localhost:5173
-
-
 ```
+---
 
-Run Locally
-docker compose up -d
-python manage.py migrate
-python manage.py runserver
+### Run Locally
+- `pip install -r requirements.txt`
+- `docker compose up -d`
+- `python manage.py migrate`
+- `python manage.py runserver`
+
