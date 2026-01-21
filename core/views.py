@@ -2,7 +2,7 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from .models import Project, Task
 from .serializers import ProjectSerializer, TaskSerializer, UserSerializer, ProjectWithTasksSerializer
-from .permissions import IsAdmin
+from .permissions import IsAdmin, IsTaskAssigneeOrAdmin
 from rest_framework.exceptions import PermissionDenied
 from django.utils.timezone import now
 from django.contrib.auth import get_user_model
@@ -23,31 +23,34 @@ class ProjectViewSet(ModelViewSet):
         serializer.save(created_by=self.request.user)
 
 class TaskViewSet(ModelViewSet):
-    '''
-        Admins can create tasks.
-        Users can update only their assigned tasks.
-    '''
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        user = self.request.user
+        if user.role == "admin":
+            return Task.objects.all()
+        return Task.objects.filter(assigned_to=user)
+
+    def get_permissions(self):
+        if self.action in ["update", "partial_update"]:
+            return [IsAuthenticated(), IsTaskAssigneeOrAdmin()]
+        return super().get_permissions()
+
     def perform_create(self, serializer):
-        # Only admin can create tasks
         if self.request.user.role != "admin":
             raise PermissionDenied("Only admin can create tasks")
-
         serializer.save()
 
     def perform_update(self, serializer):
         task = self.get_object()
-        user = self.request.user
-        new_status = self.request.data.get("status")
 
-        # If task is overdue, only admin can mark it as done
-        if task.status == "overdue" and new_status == "done":
-            if user.role != "admin":
-                raise PermissionDenied("Only admin can close overdue tasks")
+        if task.assigned_to is None:
+            raise PermissionDenied("Task is not assigned")
 
         serializer.save()
+
+    
 
 class UserViewSet(ReadOnlyModelViewSet):
     '''Read-only view for listing users.'''
