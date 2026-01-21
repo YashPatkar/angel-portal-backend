@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-gunicorn backend.wsgi:application
+uv run gunicorn backend.wsgi:application

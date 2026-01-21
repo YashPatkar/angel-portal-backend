@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -o errexit
 
-pip install uv
+# Install dependencies using uv
 uv pip install -r requirements.txt
 
-python manage.py collectstatic --noinput
-python manage.py migrate
+# Run Django commands through uv
+uv run python manage.py collectstatic --noinput
+uv run python manage.py migrate
